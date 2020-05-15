@@ -14,7 +14,7 @@ public class Scanner {
     private String token;
     private final String[] reservadas = {"Class", "boolean", "int", "float", "until", "do", "system.in.readln", "true", "false"};
     private final String[] operadores = {"<", "+", "-", "*", "="};
-    private final String[] delimitador = {"(", ")", "{", "}", ";"};
+    private final String[] delimitador = {"(", ")", "{", "}", ";", "'"};
     
     //CONSTRUCTOR
     public Scanner(String codigo) {

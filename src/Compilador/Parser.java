@@ -19,28 +19,30 @@ public class Parser {
     boolean bandera = false;
     private final Scanner s;
     private ArrayList<Token> tablaSimbolos = new ArrayList();
-    final int classx = 1, 
-    		booleanx = 2, 
-    		intx = 3, 
-    		floatx = 4, 
-    		untilx = 5, 
-    		dox = 6, 
-    		sirx = 7, 
-    		truex = 8, 
-    		falsex = 9, 
-    		menorx = 10,
-    		masx = 11, 
-    		menosx = 12, 
-    		porx = 13, 
-    		igualx = 14, 
-    		pix = 15, 
-    		pdx = 16, 
-    		li = 17, /*{*/
-    		ld = 18 , /*}*/
-    		semicolon = 19, 
-    		eofx = 20, 
-    		id = 21,
-    		stringx = 22;
+    final int classx = 1, 	//class
+    		booleanx = 2, 	//boolean
+    		intx = 3, 		//int
+    		floatx = 4, 	//float
+    		untilx = 5, 	//until
+    		dox = 6, 		//do
+    		sirx = 7, 		//if
+    		truex = 8, 		//true
+    		falsex = 9, 	//false
+    		menorx = 10,	//<
+    		masx = 11, 		//+
+    		menosx = 12, 	//-
+    		porx = 13, 		//*
+    		igualx = 14, 	//=
+    		pix = 15, 		//(
+    		pdx = 16, 		//)
+    		li = 17, 		//{	
+    		ld = 18 , 		//}
+    		semicolon = 19, //;
+    		eofx = 20, 		//<eof>
+    		id = 21,		
+    		stringx = 22,	//String
+    		mayorx = 23,    //>
+    		cox = 24;		//'
     @SuppressWarnings("unused")
 	private int tknCode, tokenEsperado;
     private String token, tokenActual, log;
@@ -59,34 +61,7 @@ public class Parser {
     		equals = false;
     		tablaSimbolos.add(tok);
     	}
-    	if(tipo != null && identificador != null && code == 14) {
-    		equals = true;
-    	} 
-    	if(tipo != null && identificador != null && equals == true && code == 21) {
-    		Token tok = new Token(tipo,identificador,lineaNo,token,null,null);
-    		tablaSimbolos.add(tok);
-    		tipo = null;
-    		identificador = null;
-    		equals = false;
-    	}
-    	if(tipo == null && identificador == null && equals == false && code == 21) {
-    		System.out.println(token + code);
-    		for(int i = 0; i<=tablaSimbolos.size(); i++) {
-    			if(tablaSimbolos.get(i).getNombre() == token) {
-    				bandera = true;
-    	    		identificador = token;
-    	    		System.out.println(tablaSimbolos.get(i).getNombre() + "  " + token);
-    	    		System.out.println("valida Indetificador" + identificador);
-    			}
-    		}
-    	}
-    	if(tipo == null && identificador != null && code == 14  ) {
-    		System.out.println("holis");
-    		equals = true;
-    	}
-    	if(tipo == null && identificador != null && equals == true && code == 21) {
-    		tablaSimbolos.forEach((n) -> ingresaValor(n, token));
-    	}
+
     }
     public void ingresaValor(Token tok, String token) {
     	if(tok.getNombre()== identificador) {
@@ -280,8 +255,13 @@ public class Parser {
     public Expx E() {
         Idx i1, i2;
         String comp1, comp2;
-       
-        if(tknCode == id) {
+        if(tknCode == cox) {
+        	eat(cox);
+        	eat(id);
+        	eat(cox);
+        	return null;
+        }         
+        else if(tknCode == id) {
             comp1 = token;
             i1 = new Idx(token);
             eat(id); 
@@ -338,7 +318,7 @@ public class Parser {
            return null;
        }
         else{
-           error(token, "( < | + | - | * | / true / false / id / Integer / Float)");
+           error(token, "( < | > | + | - | * | / true / false / id / Integer / Float)");
 
            return null;
        }
@@ -406,8 +386,10 @@ public class Parser {
             case "}": codigo=18; break;
             case ";": codigo=19; break;
             case "<eof>": codigo=20;break;
-            default: codigo=21; break;
             case "String": codigo=22;break;
+            case ">": codigo=23;break;
+            case "'": codigo=24;break;
+            default: codigo=21; break;
         }
         return codigo;
     }
