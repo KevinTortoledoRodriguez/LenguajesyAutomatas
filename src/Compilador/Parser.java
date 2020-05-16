@@ -242,6 +242,16 @@ public class Parser {
             	Expx e3;
             	System.out.println(token + " " + tknCode);
             	AsignaA = token;
+            	boolean flag = false;
+            	for(Token tok: tablaSimbolos) {
+            		System.out.println(tok + " " + AsignaA);
+                   	if(tok.getNombre().equals(AsignaA)) {
+                   		flag = true;
+               		}
+               	}
+            	if(flag == false) {
+            		errorVariableNoDefinida(token);
+               	}
             	eat(id); 
             	i = new Idx(tokenActual);
             	eat(igualx);
@@ -290,7 +300,7 @@ public class Parser {
                    		}
                    	}
             	} else {
-            		error(token,"Un numero entero");
+            		errorValidaEnteros(AsignaA,token);
             	}
             }
             eat(id); 
@@ -300,8 +310,8 @@ public class Parser {
                     comp2 = token;
                     i2 = new Idx(comp2);
                     eat(id); //(tokenActual)
-                    
                     System.out.println("Operación: " + comp1 + "<" + comp2);
+                    System.out.println(tokenActual);
                     return new Menorx(i1, i2);
             }  
             
@@ -312,6 +322,17 @@ public class Parser {
                     i2 = new Idx(comp2);
                     eat(id); //(tokenActual)
                     System.out.println("Operación: " + comp1 + "+" + comp2);
+                    for(Token tok: tablaSimbolos) {
+                       	if(tok.getNombre().equals(AsignaA)) {
+                   			tok.setValor(Integer.toString((Integer.parseInt(comp1) + Integer.parseInt(comp2))));
+                   		}else {
+                           	System.out.println("yametecudasai");
+                   		}
+                   	}
+                    /*if(s.validaInteger(comp1) && s.validaInteger(comp2)) {
+                    	comp1 = Integer.toString((Integer.parseInt(comp1) + Integer.parseInt(comp2)));
+                    	E2(comp1);
+                    }*/
                     return new Sumax(i1, i2);
 
             }
@@ -322,6 +343,13 @@ public class Parser {
                     i2 = new Idx(comp2);
                     eat(id); //(tokenActual)
                     System.out.println("Operación: " + comp1 + "-" + comp2);
+                    for(Token tok: tablaSimbolos) {
+                       	if(tok.getNombre().equals(AsignaA)) {
+                   			tok.setValor(Integer.toString((Integer.parseInt(comp1) - Integer.parseInt(comp2))));
+                   		}else {
+                           	System.out.println("yametecudasai");
+                   		}
+                   	}
                     return new Restax(i1, i2);
                     
             }
@@ -333,6 +361,13 @@ public class Parser {
                     i2 = new Idx(comp2);
                     eat(id); //(tokenActual)
                     System.out.println("Operación: " + comp1 + "*" + comp2);
+                    for(Token tok: tablaSimbolos) {
+                       	if(tok.getNombre().equals(AsignaA)) {
+                   			tok.setValor(Integer.toString((Integer.parseInt(comp1) * Integer.parseInt(comp2))));
+                   		}else {
+                           	System.out.println("yametecudasai");
+                   		}
+                   	}
                     return new Multix(i1, i2);
                      
             }
@@ -366,6 +401,9 @@ public class Parser {
        }
     }
     
+    /*public Expx E2(){
+    	
+    }*/
    
     //FIN DEL ANÁLISIS SINTÁCTICO
     
@@ -376,6 +414,40 @@ public class Parser {
                 "Error sintactico:\n"
                         + "El token:("+ token + ") no concuerda con la gramatica del lenguaje,\n"
                         + "se espera: " + t + ".\n"
+                        + "¿Desea detener la ejecucion?",
+                "Ha ocurrido un error",
+                JOptionPane.YES_NO_OPTION)) {
+            case JOptionPane.NO_OPTION:
+                int e = (int) 1.1;
+                break;
+                
+            case JOptionPane.YES_OPTION:
+                System.exit(0);
+                break;
+        }
+    }
+    public void errorVariableNoDefinida(String token) {
+        switch(JOptionPane.showConfirmDialog(null,
+                "Error sintactico:\n"
+                        + "La variable:("+ token + ") no esta declarada previamente.\n"
+                        + "¿Desea detener la ejecucion?",
+                "Ha ocurrido un error",
+                JOptionPane.YES_NO_OPTION)) {
+            case JOptionPane.NO_OPTION:
+                int e = (int) 1.1;
+                break;
+                
+            case JOptionPane.YES_OPTION:
+                System.exit(0);
+                break;
+        }
+    }
+    
+    public void errorValidaEnteros(String variable ,String token) {
+        switch(JOptionPane.showConfirmDialog(null,
+                "Error sintactico:\n"
+                        + "La variable:("+ variable + ") espera un valor de tipo entero.\n"
+                        + "El valor: " + token + " No es de tipo entero, numerico."
                         + "¿Desea detener la ejecucion?",
                 "Ha ocurrido un error",
                 JOptionPane.YES_NO_OPTION)) {
