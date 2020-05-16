@@ -46,7 +46,7 @@ public class Parser {
     @SuppressWarnings("unused")
 	private int tknCode, tokenEsperado;
     private String token, tokenActual, log;
-    
+    private String AsignaA, Asigna;
     public void validaTablaSimbolos(String token, int code) {
     	if(tipo == null && code == 1 || code == 2 || code == 3 || code == 4 || code == 22) {
     		tipo = token;
@@ -55,7 +55,7 @@ public class Parser {
     		identificador = token;
     	}
     	if(tipo != null && identificador != null && code != 14) {
-    		Token tok = new Token(tipo,identificador,lineaNo,null,null,null);
+    		Token tok = new Token(tipo,identificador,lineaNo,null,"Global",null);
     		tipo = null;
     		identificador = null;
     		equals = false;
@@ -63,14 +63,14 @@ public class Parser {
     	}
 
     }
-    public void ingresaValor(Token tok, String token) {
+    /*public void ingresaValor(Token tok, String token) {
     	if(tok.getNombre()== identificador) {
     		tok.setValor(token);
     		tipo = null;
     		identificador = null;
     		equals = false;
     	}
-    }
+    }*/
     public void impresionTablaSimbolos() {
     	tablaSimbolos.forEach((n) -> System.out.println(n));
     }
@@ -201,7 +201,7 @@ public class Parser {
         }
     }
     
-    public Statx S() { //return statement
+    public Statx S() { //statutos
 
     	Statx s1,s2;
         if(tknCode == li) {
@@ -240,6 +240,8 @@ public class Parser {
 		{
             	Idx i;
             	Expx e3;
+            	System.out.println(token + " " + tknCode);
+            	AsignaA = token;
             	eat(id); 
             	i = new Idx(tokenActual);
             	eat(igualx);
@@ -256,14 +258,41 @@ public class Parser {
         Idx i1, i2;
         String comp1, comp2;
         if(tknCode == cox) {
-        	eat(cox);
-        	eat(id);
-        	eat(cox);
-        	return null;
-        }         
-        else if(tknCode == id) {
+           	eat(cox);
+           	for(Token tok: tablaSimbolos) {
+               	if(tok.getNombre().equals(AsignaA)) {
+           			System.out.println("Es igual pliss");
+           			tok.setValor(token);
+           		}
+               	System.out.println("yametecudasai");
+           	}
+           	eat(id);
+           	eat(cox);
+           	return null;
+         } else
+        if(tknCode == id) {
             comp1 = token;
             i1 = new Idx(token);
+            String tipo = "";
+            for(Token tok: tablaSimbolos) {
+            	if(tok.getNombre().equals(AsignaA)) {
+        			tipo = tok.getTipo();
+        		}
+        	}
+            if(tipo.equals("int")) {
+            	if(s.validaInteger(token)) {
+            		for(Token tok: tablaSimbolos) {
+                       	if(tok.getNombre().equals(AsignaA)) {
+                   			System.out.println("Es igual pliss");
+                   			tok.setValor(token);
+                   		}else {
+                           	System.out.println("yametecudasai");
+                   		}
+                   	}
+            	} else {
+            		error(token,"Un numero entero");
+            	}
+            }
             eat(id); 
             if(tknCode == menorx) 
             {
@@ -310,14 +339,27 @@ public class Parser {
             return null;
        }
         else if(tknCode == truex){
+        	for(Token tok: tablaSimbolos) {
+            	if(tok.getNombre().equals(AsignaA)) {
+        			System.out.println("Es igual pliss");
+        			tok.setValor(token);
+        		}
+            	System.out.println("yametecudasai");
+        	}
            eat(truex);
            return null;
        }
         else if(tknCode == falsex){
+	    	for(Token tok: tablaSimbolos) {
+	        	if(tok.getNombre().equals(AsignaA)) {
+	    			System.out.println("Es igual pliss");
+	    			tok.setValor(token);
+	    		}
+	        	System.out.println("yametecudasai");
+	    	}
            eat(falsex);
            return null;
-       }
-        else{
+       } else {
            error(token, "( < | > | + | - | * | / true / false / id / Integer / Float)");
 
            return null;
