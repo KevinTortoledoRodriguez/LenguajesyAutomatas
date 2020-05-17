@@ -1,8 +1,10 @@
 package Compilador;
 
 import javax.swing.JOptionPane;
-import ArbolSintactico.*;
+import javax.swing.table.DefaultTableModel;
 
+import ArbolSintactico.*;
+import Compilador.Aplicacion;
 import java.util.ArrayList;
 import java.util.Vector;
 import org.apache.commons.lang3.ArrayUtils;
@@ -18,7 +20,7 @@ public class Parser {
     private boolean equals = false;
     boolean bandera = false;
     private final Scanner s;
-    private ArrayList<Token> tablaSimbolos = new ArrayList();
+    private static ArrayList<Token> tablaSimbolos = new ArrayList();
     final int classx = 1, 	//class
     		booleanx = 2, 	//boolean
     		intx = 3, 		//int
@@ -46,7 +48,9 @@ public class Parser {
     @SuppressWarnings("unused")
 	private int tknCode, tokenEsperado;
     private String token, tokenActual, log;
-    private String AsignaA, Asigna;
+    private String AsignaA;
+    private static DefaultTableModel modelotabla;
+    
     public void validaTablaSimbolos(String token, int code) {
     	if(tipo == null && code == 1 || code == 2 || code == 3 || code == 4 || code == 22) {
     		tipo = token;
@@ -63,16 +67,21 @@ public class Parser {
     	}
 
     }
-    /*public void ingresaValor(Token tok, String token) {
-    	if(tok.getNombre()== identificador) {
-    		tok.setValor(token);
-    		tipo = null;
-    		identificador = null;
-    		equals = false;
-    	}
-    }*/
+
     public void impresionTablaSimbolos() {
-    	tablaSimbolos.forEach((n) -> System.out.println(n));
+    	Object columnas[] = {"Tipo","Nombre","Linea","Valor","Global","Local"};
+    	modelotabla = new DefaultTableModel(columnas,0);
+    	for(int i = 0; i<tablaSimbolos.size();i++) {
+    		modelotabla.addRow(new Object[] {
+    				tablaSimbolos.get(i).getTipo(), 
+    				tablaSimbolos.get(i).getNombre(), 
+    				tablaSimbolos.get(i).getLinea(), 
+    				tablaSimbolos.get(i).getValor(), 
+    				tablaSimbolos.get(i).getGlobal(), 
+    				tablaSimbolos.get(i).getLocal()
+    				});	
+    	}
+    	Compilador.Aplicacion.llenadoTabla(modelotabla);
     }
     
     public Parser(String codigo) {  
@@ -244,7 +253,6 @@ public class Parser {
             	AsignaA = token;
             	boolean flag = false;
             	for(Token tok: tablaSimbolos) {
-            		System.out.println(tok + " " + AsignaA);
                    	if(tok.getNombre().equals(AsignaA)) {
                    		flag = true;
                		}
@@ -273,8 +281,9 @@ public class Parser {
                	if(tok.getNombre().equals(AsignaA)) {
            			System.out.println("Es igual pliss");
            			tok.setValor(token);
+           		} else {
+                   	System.out.println("yametecudasai");
            		}
-               	System.out.println("yametecudasai");
            	}
            	eat(id);
            	eat(cox);
@@ -311,7 +320,6 @@ public class Parser {
                     i2 = new Idx(comp2);
                     eat(id); //(tokenActual)
                     System.out.println("Operación: " + comp1 + "<" + comp2);
-                    System.out.println(tokenActual);
                     return new Menorx(i1, i2);
             }  
             
@@ -378,8 +386,9 @@ public class Parser {
             	if(tok.getNombre().equals(AsignaA)) {
         			System.out.println("Es igual pliss");
         			tok.setValor(token);
+        		} else {
+                	System.out.println("yametecudasai");
         		}
-            	System.out.println("yametecudasai");
         	}
            eat(truex);
            return null;
@@ -389,8 +398,9 @@ public class Parser {
 	        	if(tok.getNombre().equals(AsignaA)) {
 	    			System.out.println("Es igual pliss");
 	    			tok.setValor(token);
+	    		} else {
+		        	System.out.println("yametecudasai");
 	    		}
-	        	System.out.println("yametecudasai");
 	    	}
            eat(falsex);
            return null;

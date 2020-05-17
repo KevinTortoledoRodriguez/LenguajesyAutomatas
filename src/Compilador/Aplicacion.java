@@ -1,5 +1,4 @@
 package Compilador;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -23,6 +22,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import java.awt.TextArea;
+import Compilador.Parser;
 
 public class Aplicacion extends JFrame implements ActionListener{
     /**
@@ -36,6 +39,9 @@ public class Aplicacion extends JFrame implements ActionListener{
     JLabel jlerror;
     JFileChooser abrirArchivo;
     public Parser pars;
+    private static JTable tablaSimbolos;
+    private TextArea  codInter;
+    public DefaultTableModel modelTable;
     
     private void bueno(){
         centro = new JPanel();
@@ -53,8 +59,26 @@ public class Aplicacion extends JFrame implements ActionListener{
         parser.setBounds(10,304,100,30);
         centro.add(parser);
         getContentPane().add(centro,BorderLayout.CENTER);
+        
+        codInter = new TextArea();
+        codInter.setBounds(426, 50, 340, 229);
+        centro.add(codInter);
+        
+        tablaSimbolos = new JTable();
+        tablaSimbolos.setBounds(25, 350, 741, 92);
+        centro.add(tablaSimbolos);
+        
+        JLabel lblNewLabel = new JLabel("Codigo Intermedio");
+        lblNewLabel.setBounds(426, 28, 100, 14);
+        centro.add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("Tabla de Simbolos");
+        lblNewLabel_1.setBounds(355, 330, 138, 14);
+        centro.add(lblNewLabel_1);
     }
-    
+    public static void llenadoTabla(DefaultTableModel model) {
+    	tablaSimbolos.setModel(model);
+    }
     private void BarraHerramientas() {
         //configuracion general
         jtbMainP = new JToolBar();
@@ -72,7 +96,7 @@ public class Aplicacion extends JFrame implements ActionListener{
     public Aplicacion(){
         super();
 		getContentPane().setLayout(new BorderLayout());
-		setSize(new Dimension(447, 530));
+		setSize(new Dimension(805, 530));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
