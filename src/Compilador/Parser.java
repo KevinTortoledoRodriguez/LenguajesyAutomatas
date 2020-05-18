@@ -122,6 +122,7 @@ public class Parser {
 		int count = 1;
 		String validaVariable = "";
 		String variable="";
+		System.out.println(cuadro);
 		System.out.println("Cuadruple:  " + cuadro.get(1) + " " + cuadro.get(2) + " "+ cuadro.get(3) + " " +cuadro.get(4) + " " + cuadro.get(5));
 		System.out.println("Operador" + "   " + "O1" + "   " + "O2" + "   " + "Res");
 		while(cuadro.size() > 2) {
@@ -390,22 +391,12 @@ public class Parser {
             }
             String valida = token;
             eat(id);
-            if(tknCode == 14 || tknCode == 11){
+            if(tknCode == 14 || tknCode == 11 || tknCode == 12 || tknCode == 13){
             	cuadruples.add(AsignaA);
             	cuadruples.add(valida);
             	//cuadruples.add(token);
             }
-            /*if(tknCode == menorx) 
-            {
-            		cuadrupleString valida = token;s.add(token);
-            		eat(menorx);
-                    comp2 = token;
-                    i2 = new Idx(comp2);
-                    eat(id); //(tokenActual)
-                    System.out.println("Operación: " + comp1 + "<" + comp2);
-                    return new Menorx(i1, i2);
-            }  
-            else*/ if(tknCode == masx) 
+            if(tknCode == masx) 
             {
             		cuadruples.add(token);
                     eat(masx);
@@ -458,7 +449,7 @@ public class Parser {
                     System.out.println("Operación: " + comp1 + "*" + comp2);
                     for(Token tok: tablaSimbolos) {
                        	if(tok.getNombre().equals(AsignaA)) {
-                       		String valor = Integer.toString((Integer.parseInt(comp1) + Integer.parseInt(comp2)));
+                       		String valor = Integer.toString((Integer.parseInt(comp1) * Integer.parseInt(comp2)));
                    			tok.setValor(valor);
                    			E2(valor);
                    		}else {
