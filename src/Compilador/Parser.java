@@ -147,8 +147,6 @@ public class Parser {
 						validaVariable = CalculaResultado(cuadro.get(2),validaVariable,cuadro.get(3));
 						cuadro2.add(cuadro.get(0));
 						cuadro2.add("T"+count);
-						cuadro2.add(cuadro.get(2));
-						cuadro2.add(cuadro.get(3));
 						cuadro = cuadro2;
 					} else {
 						for(Token tok: tablaSimbolos) {
@@ -563,6 +561,8 @@ public class Parser {
                 	if(comp2.equals("")) {
                 		errorTipoNoCompatible(token);
                 	}
+                } else {
+                	comp2= token;
                 }
             	cuadruples.add(token);
                 eat(id); //(tokenActual)
